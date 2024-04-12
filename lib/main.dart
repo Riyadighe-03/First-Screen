@@ -1,15 +1,24 @@
+import 'package:firstscreen/counter_cubit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final counterCubit = CounterCubit();
+
   @override
   Widget build(BuildContext context) {
+    final counter = counterCubit.state;
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(leading: Icon(Icons.close), actions: [
@@ -27,7 +36,7 @@ class MyApp extends StatelessWidget {
             Container(
               height: 250,
               width: 350,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               margin: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
@@ -80,23 +89,29 @@ class MyApp extends StatelessWidget {
                         ),
                         Row(children: [
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              counterCubit.decremnet();
+                              setState(() {});
+                            },
                             child: const Text("-",
                                 style: TextStyle(color: Colors.black)),
                           ),
                           const SizedBox(
                             width: 30,
                           ),
-                          const Text(
-                            "\$100",
-                            style: TextStyle(
+                          Text(
+                            "$counter",
+                            style: const TextStyle(
                                 fontSize: 28, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(
                             width: 30,
                           ),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              counterCubit.increment();
+                              setState(() {});
+                            },
                             child: const Text(
                               "+",
                               style: TextStyle(color: Colors.black),
@@ -114,7 +129,7 @@ class MyApp extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              padding: EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
@@ -129,7 +144,7 @@ class MyApp extends StatelessWidget {
                               width: 40,
                             ),
                             Container(
-                              padding: EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
@@ -144,7 +159,7 @@ class MyApp extends StatelessWidget {
                               width: 40,
                             ),
                             Container(
-                              padding: EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
