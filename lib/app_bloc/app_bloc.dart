@@ -11,7 +11,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<DecrementEvent>((event, emit) {
       emit(UpdatedState(event.count - 1));
     });
-    Stream<AppState> mapEventToState(AppEvent event) async* {
+    Stream<AppState>(AppEvent event) async* {
       if (event is IncrementEvent) {
         yield UpdatedState(
             state is UpdatedState ? (state as UpdatedState).count + 1 : 1);
