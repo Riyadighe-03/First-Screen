@@ -1,9 +1,39 @@
+import 'package:firstscreen/foreground_notification.dart';
+import 'package:firstscreen/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:firstscreen/app_bloc/app_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-void main() {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('Handling a background message ${message.messageId}');
+  print('Notification Message: ${message.data}');
+  NotificationService.showNotification(message);
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+          options: const FirebaseOptions(
+              appId: '1:904494419924:android:cf5b3245127ce7ba80d041',
+              apiKey: 'AIzaSyDnxDqHkfQDc-jgADfRbDlnsBm_kGmwVVM',
+              messagingSenderId: '904494419924',
+              projectId: 'firstscreen-4ac8e',
+              storageBucket: "firstscreen-4ac8e.appspot.com"))
+      .then((value) => print("Successfull"))
+      .then((value) => debugPrint("firebase initialised"));
+  FirebaseMessaging.onBackgroundMessage(onBackgroundMessageHandler);
+  NotificationService.initialize();
+  PushNotification().initialize();
+
   runApp(const MyApp());
+}
+
+Future<void> onBackgroundMessageHandler(message) async {
+  print("onBackgroundMessage: $message");
 }
 
 class MyApp extends StatefulWidget {
@@ -16,15 +46,64 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   //final MyApp appBloc = BlocProvider.of<AppBloc>(context);
   final AppBloc appBloc = AppBloc();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  //final PushNotification _notificationService = PushNotification();
 
   @override
   void initState() {
     super.initState();
+    //setupFirebaseMessaging();
     appBloc.add(IncrementEvent(0));
+    const InitializationSettings(
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'));
+    /* NotificationService.initialize();
+    // FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    //   alert: true,
+    //   badge: true,
+    //   sound: true,
+    );*/
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   NotificationService.showNotification(message);
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext dialogContext) => AlertDialog(
+    //       content: Text(message.notification?.body ?? "No body"),
+    //       title: Text(message.notification?.title ?? "No Title"),
+    //     ),
+    //   );
+    // });
+  }
+
+  void setupFirebaseMessaging() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      showNotificationSnackBar(message);
+    });
+  }
+
+  void showNotificationSnackBar(RemoteMessage message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message.notification?.body ??
+              'You received a notification with no body.',
+          style: TextStyle(fontSize: 16),
+        ),
+        duration: Duration(seconds: 4),
+        action: SnackBarAction(
+          label: 'DISMISS',
+          onPressed: () {
+            setupFirebaseMessaging();
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    // _notificationService.initialize();
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(leading: Icon(Icons.close), actions: [

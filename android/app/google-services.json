@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "904494419924",
+    "project_id": "firstscreen-4ac8e",
+    "storage_bucket": "firstscreen-4ac8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904494419924:android:cf5b3245127ce7ba80d041",
+        "android_client_info": {
+          "package_name": "com.example.firstscreen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnxDqHkfQDc-jgADfRbDlnsBm_kGmwVVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
