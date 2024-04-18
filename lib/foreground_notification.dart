@@ -28,11 +28,13 @@ class NotificationService {
     AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       "default_notification_channel_id",
       "channel",
+      channelDescription: 'description',
+      icon: '@mipmap/ic_launcher',
       enableLights: true,
       enableVibration: true,
       priority: Priority.high,
       importance: Importance.max,
-      largeIcon: DrawableResourceAndroidBitmap("ic_launcher"),
+      // largeIcon: DrawableResourceAndroidBitmap("@mipmap/ic_launcher"),
       styleInformation: MediaStyleInformation(
         htmlFormatContent: true,
         htmlFormatTitle: true,
@@ -42,15 +44,18 @@ class NotificationService {
 
     await _flutterLocalNotificationsPlugin.show(
         message.data.hashCode,
-        message.data['title'],
-        message.data['body'],
+        message.notification?.title,
+        message.notification?.body,
+        /* message.data['title'] ?? 'Default Title',
+        message.data['text'] ?? 'Default Text',*/
         NotificationDetails(
           android: androidDetails,
         ));
   }
 
-  Future<void> getDevToken() async {
+  Future<String?> _getDevToken() async {
     String? token = await FirebaseMessaging.instance.getToken();
     print("DEV TOKEN FIREBASE CLOUD MESSAGING -> $token");
+    return token;
   }
 }

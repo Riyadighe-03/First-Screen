@@ -53,10 +53,24 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    //setupFirebaseMessaging();
+    // setupFirebaseMessaging();
     appBloc.add(IncrementEvent(0));
     const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'));
+    FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: true,
+      sound: true,
+    );
+    // FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    //   alert: true,
+    //   badge: true,
+    //   sound: true,
+    // );
     /* NotificationService.initialize();
     // FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     //   alert: true,
@@ -89,7 +103,7 @@ class _MyAppState extends State<MyApp> {
               'You received a notification with no body.',
           style: TextStyle(fontSize: 16),
         ),
-        duration: Duration(seconds: 4),
+        duration: Duration(seconds: 8),
         action: SnackBarAction(
           label: 'DISMISS',
           onPressed: () {

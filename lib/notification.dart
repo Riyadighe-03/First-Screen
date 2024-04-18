@@ -13,6 +13,7 @@ class PushNotification {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Got a message whilst in the foreground! $message');
       print('Message data: ${message.data.toString()}');
+      NotificationService.showNotification(message);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -43,8 +44,9 @@ class PushNotification {
     print('Handling a background message ${message.messageId}');
   }
 
-  Future<void> _getDevToken() async {
+  Future<String?> _getDevToken() async {
     String? token = await _fcm.getToken();
     print('DEV TOKEN FIREBASE CLOUD MESSAGING -> $token');
+    return token;
   }
 }
